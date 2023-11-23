@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Mpesa_App",
-    "slug": "Mpesa_App",
+    "name": "Bingwa",
+    "slug": "Bingwa",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.gilbertkorir.Bingwa"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7aa7f085-8fa6-4602-ae0d-19907cc413a0"
+      }
     }
   }
 }
