@@ -1,6 +1,7 @@
 //import liraries
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput,ActivityIndicator} from 'react-native';
+import API_KEY from '../config';
 
 // create a component
 const DataBundles = () => {
@@ -55,7 +56,7 @@ const DataBundles = () => {
         }
         const amount = selectedOption.amount;
         await setLoad(!load)
-        fetch('https://shy-newt-jeans.cyclic.app/stkPush',{
+        fetch(API_KEY,{
           method:'POST',
           body: JSON.stringify({
             phone: phone,
