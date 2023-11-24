@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput,ActivityIndicator} from 'react-native';
 
 // create a component
 const DataBundles = () => {
@@ -16,6 +16,7 @@ const DataBundles = () => {
   const [userInput, setUserInput] = useState('');
   const [phone, setPhone] = useState('');
   const [showPaymentView, setShowPaymentView]= useState(false);
+  const [load, setLoad] = useState(false);
 
   const handleNext = () => {
     if (!userInput.trim()) {
@@ -43,11 +44,31 @@ const DataBundles = () => {
     const handleCancel = () => {
       resetSelection();
       setShowPaymentView(false);
+      setPhone('');
     };
-    const handlePay = (screen) => {
+
+    const handlePay =async () => {
       if (selectedOption) {
+        if(!phone){
+          alert("Please fill in the phone number before you proceed!");
+          return;
+        }
         const amount = selectedOption.amount;
-        alert(`Amount to pay: Ksh. ${amount} ${phone}`);
+        await setLoad(!load)
+        fetch('https://shy-newt-jeans.cyclic.app/stkPush',{
+          method:'POST',
+          body: JSON.stringify({
+            phone: phone,
+            amount: amount
+          }),
+          headers:{
+            "Content-Type":"application/json"
+          }
+        }).then(()=>{
+          setLoad(false);
+        }).catch((error)=>{
+          setLoad(false);
+        })
       }
     };
 
@@ -74,7 +95,7 @@ const DataBundles = () => {
           onChangeText={(text) => setPhone(text)}/>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', top: 20 }}>
-        <TouchableOpacity onPress={handleCancel}
+         <TouchableOpacity onPress={handleCancel}
             style={{
               width: '35%',
               backgroundColor: '#ef4444',
@@ -87,7 +108,7 @@ const DataBundles = () => {
             <Text style={{ alignSelf: 'center', color: 'white' }}>Cancel</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={handlePay}
+          <TouchableOpacity onPress={()=>{handlePay()}}
             style={{
               width: '35%',
               backgroundColor: '#65a30d',
@@ -97,9 +118,18 @@ const DataBundles = () => {
               borderRadius: 10,
               alignSelf: 'center',
             }}>
+            
             <Text style={{ alignSelf: 'center', color: 'white' }}>Pay</Text>
           </TouchableOpacity>
         </View>
+
+           {load ?(
+              <View style={{marginTop:30}}>
+                <ActivityIndicator size={'large'} color='blue'/>
+              </View>
+              ):(
+                null
+            )}
       </View>
     ) : (
       <View>
